@@ -1,4 +1,4 @@
-import { ShoppingCart } from "@mui/icons-material";
+import { ShoppingCart } from '@mui/icons-material';
 import {
   AppBar,
   Badge,
@@ -9,44 +9,45 @@ import {
   Switch,
   Toolbar,
   Typography,
-} from "@mui/material";
-import { NavLink } from "react-router-dom";
+} from '@mui/material';
+import { Link, NavLink } from 'react-router-dom';
+import { useStoreContext } from '../context/StoreContext';
 
 const midLinks = [
   {
-    title: "catalog",
-    path: "/catalog",
+    title: 'catalog',
+    path: '/catalog',
   },
   {
-    title: "about",
-    path: "/about",
+    title: 'about',
+    path: '/about',
   },
   {
-    title: "contact",
-    path: "/contact",
+    title: 'contact',
+    path: '/contact',
   },
 ];
 
 const rightLinks = [
   {
-    title: "login",
-    path: "/login",
+    title: 'login',
+    path: '/login',
   },
   {
-    title: "register",
-    path: "/register",
+    title: 'register',
+    path: '/register',
   },
 ];
 
 const navStyles = {
-  color: "inherit",
-  textDecoration: "none",
-  typography: "h6",
-  "&:hover": {
-    color: "grey.500",
+  color: 'inherit',
+  textDecoration: 'none',
+  typography: 'h6',
+  '&:hover': {
+    color: 'grey.500',
   },
-  "&.active": {
-    color: "text.secondary",
+  '&.active': {
+    color: 'text.secondary',
   },
 };
 interface Props {
@@ -55,36 +56,46 @@ interface Props {
 }
 
 export default function Header({ darkMode, handleThemeChange }: Props) {
+  const { basket } = useStoreContext();
+  const itemCount = basket?.items.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
-    <AppBar position="static" sx={{ mb: 4 }}>
+    <AppBar position='static' sx={{ mb: 4 }}>
       <Toolbar
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        <Box sx={{display:'flex', alignItems:'center'}}>
-          <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant='h6' component={NavLink} to='/' sx={navStyles}>
             STORE
           </Typography>
           <Switch checked={darkMode} onChange={handleThemeChange} />
         </Box>
 
-        <List sx={{ display: "flex" }}>
+        <List sx={{ display: 'flex' }}>
           {midLinks.map(({ title, path }) => (
             <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
               {title.toUpperCase()}
             </ListItem>
           ))}
         </List>
-        <Box sx={{display:'flex', alignItems:'center'}}>
-          <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
-            <Badge badgeContent={4} color="secondary">
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton
+            component={Link}
+            to='/basket'
+            size='large'
+            edge='start'
+            color='inherit'
+            sx={{ mr: 2 }}
+          >
+            <Badge badgeContent={itemCount} color='secondary'>
               <ShoppingCart />
             </Badge>
           </IconButton>
-          <List sx={{ display: "flex" }}>
+          <List sx={{ display: 'flex' }}>
             {rightLinks.map(({ title, path }) => (
               <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
                 {title.toUpperCase()}
